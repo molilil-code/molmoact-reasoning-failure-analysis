@@ -116,7 +116,7 @@ def summarize_groups(summary: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def plot_summary(summary: pd.DataFrame, output: Path) -> None:
+def plot_summary(summary: pd.DataFrame, epsilon: float, output: Path) -> None:
     metrics = [
         ("amplitude_thresholded_turning_rate", "Turning rate | qualified pairs"),
         ("prominent_peak_rate_per10", "Prominent peaks per 10 steps"),
@@ -142,7 +142,9 @@ def plot_summary(summary: pd.DataFrame, output: Path) -> None:
         axis.set_title(title)
         axis.grid(alpha=0.25)
     axes[0].legend(loc="best")
-    fig.suptitle("OpenDrawer amplitude-thresholded depth dynamics | epsilon=0.05")
+    fig.suptitle(
+        f"OpenDrawer amplitude-thresholded depth dynamics | epsilon={epsilon:g}"
+    )
     fig.tight_layout()
     fig.savefig(output, dpi=180, bbox_inches="tight")
     plt.close(fig)
@@ -165,8 +167,10 @@ def write_report(summary: pd.DataFrame, group_summary: pd.DataFrame, args: argpa
         "and should be preferred over raw local maxima when small token-level "
         "wiggles dominate.",
         "",
-        "These are exploratory episode-level summaries (8 failures and 12 "
-        "successes), not cross-validated predictors.",
+        "These are exploratory episode-level summaries ("
+        f"{int(summary['episode_failure'].sum())} failures and "
+        f"{int(summary['episode_success'].sum())} successes), "
+        "not cross-validated predictors.",
     ]
     output.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -182,7 +186,7 @@ def main() -> None:
     report_path = args.output_dir / "opendrawer_amplitude_dynamics_report.md"
     summary.to_csv(summary_path, index=False)
     group_summary.to_csv(group_path, index=False)
-    plot_summary(summary, plot_path)
+    plot_summary(summary, args.epsilon, plot_path)
     write_report(summary, group_summary, args, report_path)
     print(group_summary.to_string(index=False))
     print(summary_path)

@@ -10,8 +10,6 @@ from MolmoAct can provide early warning of manipulation failures.
 - One-step closed-loop evaluation: working
 - Rollout instrumentation: in progress
 
-## Teacher-facing release
-
 The curated GitHub contents are documented in
 [`GITHUB_RELEASE_MANIFEST.md`](GITHUB_RELEASE_MANIFEST.md). It keeps the
 analysis code, compact derived tables, and representative figures while

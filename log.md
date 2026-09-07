@@ -176,3 +176,84 @@ trace-depth consistency
 | OpenDrawer | mean endpoint-depth percentile drift |  0.0460 |  0.0930 |     **−0.0470** |
 | Pick Coke  | mean endpoint-depth percentile drift |  0.0459 |  0.0714 |     **−0.0255** |
 
+6. OpenDrawer depth-change dynamics：幅度阈值 turning / prominent peaks
+
+为避免把小幅度 token-level wiggles 当成有意义的 turning，使用：
+
+```text
+delta_t = y_t - y_{t-1}
+turning_t = 1[delta_t * delta_{t+1} < 0
+              且 |delta_t| > epsilon
+              且 |delta_{t+1}| > epsilon]
+```
+
+其中 `y_t = feat_depth_change_ratio_prev`，`epsilon = 0.05`。同时计算
+prominence-filtered peak rate 和 median inter-peak interval；全程不使用
+operational onset。
+
+| 指标 | Failure (n=8) | Success (n=12) | Failure−Success | p-value |
+| --- | ---: | ---: | ---: | ---: |
+| qualified-pair turning rate | 0.754 | 0.694 | +0.059 | 0.122 |
+| all-pairs turning rate | 0.268 | 0.415 | −0.147 | 0.0077 |
+| prominent peaks / 10 steps | 2.188 | 2.523 | −0.335 | 0.058 |
+| median inter-peak interval | 3.688 | 3.083 | +0.604 | 0.102 |
+
+解释：失败样本不是显著峰更密集，而是更容易进入长时间低变化尾部；图中看到的高频 wiggles 多数是小幅度变化。因此 amplitude-thresholded turning 适合做失败模式描述，暂不作为单独在线预警器。
+
+7. 两条 episode-level depth 规则验证（2026-09-07）
+
+在 20 个完整 OpenDrawer episode 上验证：
+
+```text
+Rule A: episode median(feat_depth_change_ratio_prev) < 0.22 -> failure
+Rule B: fraction(feat_depth_change_ratio_prev < 0.10) > 0.14 -> failure
+```
+
+两条规则结果完全一致：
+
+| Rule | TP | TN | FP | FN | Accuracy | Failure recall | Success specificity |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Rule A | 8 | 12 | 0 | 0 | 100% | 100% | 100% |
+| Rule B | 8 | 12 | 0 | 0 | 100% | 100% | 100% |
+
+对应的失败 episode 为 `C00, C02, C07, C08, C09, C10, C11, C18`。分组统计为：
+
+```text
+episode median: failure median=0.13, success median=0.37, AUC=1.0, p=0.00024
+low-ratio fraction: failure median=0.402, success median=0.032, AUC=1.0, p=0.00023
+```
+
+阈值分离间隔为：median 约 `0.19–0.27`，low-ratio fraction 约
+`0.118–0.161`。但这两个指标高度相关（Pearson r=-0.925），本质上是同一
+stagnation 现象的两种表达，不能视为独立证据。
+
+重要限制：上述 100% 分离是完整 episode 的 retrospective 结果。失败局大多
+运行到 112 步，而成功局较短，规则会利用失败后期的停滞信息，不能直接等同于
+在线 failure onset 或提前预警。若要用于 RQ2，下一步必须改为 prefix-only
+统计，在训练 fold 内选择阈值，并在 held-out episode 上报告 lead time。
+
+复现实验：
+
+```text
+python analysis/analyze_opendrawer_amplitude_dynamics.py --epsilon 0.05
+python analysis/verify_opendrawer_depth_rules.py
+```
+
+主要输出：
+
+```text
+data/opendrawer_analysis/opendrawer_amplitude_dynamics_group_summary.csv
+data/opendrawer_analysis/opendrawer_depth_rule_stats.csv
+data/opendrawer_analysis/opendrawer_depth_rule_episode.csv
+data/opendrawer_analysis/opendrawer_depth_rule_verification.png
+```
+
+目前可以得出以下结论。
+1. OpenDrawer 失败与“低 depth-change / 进度停滞”明显相关。
+失败 episode：
+• episode median 中位数：0.13
+• ratio < 0.1 的比例中位数：0.402
+成功 episode：
+• episode median 中位数：0.37
+• ratio < 0.1 的比例中位数：0.032
+因此，失败轨迹整体上更容易进入长期低变化状态。

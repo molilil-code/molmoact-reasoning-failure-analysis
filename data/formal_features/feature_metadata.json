@@ -1,0 +1,14 @@
+{
+  "input_root": "/root/autodl-tmp/molmoact_project/results/formal",
+  "num_rollouts_found": 100,
+  "num_rollouts_extracted": 100,
+  "num_rollouts_skipped": 0,
+  "num_steps_extracted": 6356,
+  "rolling_window": 3,
+  "trace_resample_points": 20,
+  "drawer_success_qpos": 0.15,
+  "feature_prefix": "feat_",
+  "label_prefix": "label_",
+  "post_prefix": "post_",
+  "note": "Only feat_* columns are intended as online predictor inputs. label_* and post_* columns are supervision/analysis fields."
+}

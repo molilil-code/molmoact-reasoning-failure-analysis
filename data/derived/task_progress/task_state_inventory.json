@@ -1,0 +1,990 @@
+{
+  "source_root": "results\\formal",
+  "generated_by": "analysis/extract_raw_task_progress.py",
+  "scope": "raw task-state GT extraction only; onset/progress intentionally undefined",
+  "tasks": {
+    "pick_coke_can": {
+      "task": "pick_coke_can",
+      "episodes": 45,
+      "steps": 2853,
+      "successful_episodes": 18,
+      "failed_or_truncated_episodes": 27,
+      "fields": [
+        {
+          "name": "gt_consecutive_grasp",
+          "source": "steps.post_action.info.consecutive_grasp",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false
+          ]
+        },
+        {
+          "name": "gt_elapsed_steps",
+          "source": "steps.post_action.info.elapsed_steps",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 45,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "integer"
+          ],
+          "distinct_values_sample": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ]
+        },
+        {
+          "name": "gt_is_grasped",
+          "source": "steps.post_action.info.is_grasped",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 18,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false,
+            true
+          ]
+        },
+        {
+          "name": "gt_lifted_object",
+          "source": "steps.post_action.info.lifted_object",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 18,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false,
+            true
+          ]
+        },
+        {
+          "name": "gt_lifted_object_significantly",
+          "source": "steps.post_action.info.lifted_object_significantly",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 10,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false,
+            true
+          ]
+        },
+        {
+          "name": "gt_object_init_x",
+          "source": "summary.reset_info",
+          "scope": "episode_initial_only",
+          "step_coverage": null,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": true,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            0.6991050243377686,
+            0.6991093158721924,
+            0.6991146802902222,
+            0.6991069912910461,
+            0.6991069316864014,
+            0.6416065096855164,
+            0.641604483127594,
+            0.6416081190109253,
+            0.6416125893592834,
+            0.5841062068939209,
+            0.5841424465179443,
+            0.5841189622879028,
+            0.5841059684753418,
+            0.5266419053077698,
+            0.5266056656837463,
+            0.5266497135162354,
+            0.5266100764274597,
+            0.5266057252883911,
+            0.46910589933395386,
+            0.4691064655780792
+          ]
+        },
+        {
+          "name": "gt_object_init_y",
+          "source": "summary.reset_info",
+          "scope": "episode_initial_only",
+          "step_coverage": null,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": true,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            0.2198445349931717,
+            0.10984144359827042,
+            -0.00015014410018920898,
+            -0.11015701293945312,
+            -0.22015783190727234,
+            0.2198409140110016,
+            0.10984630882740021,
+            -0.0001589059829711914,
+            -0.11015960574150085,
+            -0.22015804052352905,
+            0.21984246373176575,
+            0.10984305292367935,
+            -0.00015376508235931396,
+            -0.11006379127502441,
+            -0.22015973925590515,
+            0.21984276175498962,
+            0.10984264314174652,
+            -0.00015456974506378174,
+            -0.11015784740447998,
+            -0.22015845775604248
+          ]
+        },
+        {
+          "name": "gt_object_init_z",
+          "source": "summary.reset_info",
+          "scope": "episode_initial_only",
+          "step_coverage": null,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": true,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            0.8405754566192627,
+            0.8405770063400269,
+            0.840575635433197,
+            0.8405755162239075,
+            0.8405757546424866,
+            0.8405761122703552,
+            0.8405756950378418,
+            0.8405779004096985,
+            0.8405777812004089,
+            0.8405786752700806,
+            0.8405758142471313,
+            0.8405760526657104,
+            0.8774227499961853,
+            0.8774243593215942,
+            0.877492368221283,
+            0.8774229288101196,
+            0.8774228692054749,
+            0.877423107624054,
+            0.8774229884147644,
+            0.8774228096008301
+          ]
+        },
+        {
+          "name": "gt_reward",
+          "source": "steps.post_action.reward",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 18,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "gt_success",
+          "source": "steps.post_action.info.success",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 18,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false,
+            true
+          ]
+        },
+        {
+          "name": "gt_terminated",
+          "source": "steps.post_action.terminated",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 18,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false,
+            true
+          ]
+        },
+        {
+          "name": "gt_truncated",
+          "source": "steps.post_action.truncated",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 27,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false,
+            true
+          ]
+        }
+      ],
+      "missing_candidate_fields": [
+        "per_step_object_position",
+        "per_step_object_z",
+        "per_step_tcp_position",
+        "per_step_tcp_object_distance",
+        "per_step_gripper_state"
+      ],
+      "progress_definition": null,
+      "onset_definition": null,
+      "notes": [
+        "This first-pass extraction is raw task-state GT only.",
+        "No predictor features, progress transforms, onset labels, threshold selection, or model training are performed.",
+        "Episode-initial poses are explicitly marked episode_initial_only and are not per-step trajectories."
+      ]
+    },
+    "move_near": {
+      "task": "move_near",
+      "episodes": 35,
+      "steps": 2187,
+      "successful_episodes": 15,
+      "failed_or_truncated_episodes": 20,
+      "fields": [
+        {
+          "name": "gt_all_obj_keep_height",
+          "source": "steps.post_action.info.all_obj_keep_height",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 2,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            true,
+            false
+          ]
+        },
+        {
+          "name": "gt_elapsed_steps",
+          "source": "steps.post_action.info.elapsed_steps",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 35,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "integer"
+          ],
+          "distinct_values_sample": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ]
+        },
+        {
+          "name": "gt_is_closest_to_tgt",
+          "source": "steps.post_action.info.is_closest_to_tgt",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 10,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false,
+            true
+          ]
+        },
+        {
+          "name": "gt_moved_correct_obj",
+          "source": "steps.post_action.info.moved_correct_obj",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 26,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false,
+            true
+          ]
+        },
+        {
+          "name": "gt_moved_wrong_obj",
+          "source": "steps.post_action.info.moved_wrong_obj",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false
+          ]
+        },
+        {
+          "name": "gt_near_tgt_obj",
+          "source": "steps.post_action.info.near_tgt_obj",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 15,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false,
+            true
+          ]
+        },
+        {
+          "name": "gt_reward",
+          "source": "steps.post_action.reward",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 15,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "gt_source_init_x",
+          "source": "summary.reset_info",
+          "scope": "episode_initial_only",
+          "step_coverage": null,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": true,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            0.6642991304397583,
+            0.6647871136665344,
+            0.6889330148696899,
+            0.6889331340789795,
+            0.4761850833892822,
+            0.47607260942459106,
+            0.4650939106941223,
+            0.4642859101295471,
+            0.6754501461982727,
+            0.6754531860351562,
+            0.4896697998046875,
+            0.48964977264404297,
+            0.6615132093429565,
+            0.6887872219085693,
+            0.4762927293777466,
+            0.47629252076148987,
+            0.46232131123542786,
+            0.6753097772598267,
+            0.6755001544952393,
+            0.48977476358413696
+          ]
+        },
+        {
+          "name": "gt_source_init_y",
+          "source": "summary.reset_info",
+          "scope": "episode_initial_only",
+          "step_coverage": null,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": true,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            0.2257809340953827,
+            0.22454477846622467,
+            -0.06835614144802094,
+            -0.06835661828517914,
+            0.06287750601768494,
+            0.06264661252498627,
+            0.20781096816062927,
+            0.20820187032222748,
+            0.08103542029857635,
+            0.08103592693805695,
+            -0.08650435507297516,
+            -0.08655084669589996,
+            0.2305966317653656,
+            -0.06927768886089325,
+            0.0630350410938263,
+            0.06303441524505615,
+            0.21262229979038239,
+            0.08012022078037262,
+            0.08010527491569519,
+            -0.08635853230953217
+          ]
+        },
+        {
+          "name": "gt_source_init_z",
+          "source": "summary.reset_info",
+          "scope": "episode_initial_only",
+          "step_coverage": null,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": true,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            0.8956101536750793,
+            0.8959947228431702,
+            0.8727704882621765,
+            0.8443600535392761,
+            0.8443585634231567,
+            0.8956103920936584,
+            0.8954683542251587,
+            0.8727703094482422,
+            0.872770369052887,
+            0.8443602323532104,
+            0.8443601131439209,
+            0.8714383244514465,
+            0.844357430934906,
+            0.8270313739776611,
+            0.8270313143730164,
+            0.8714385628700256,
+            0.8443573117256165,
+            0.8443574905395508,
+            0.8270314335823059,
+            0.8774229884147644
+          ]
+        },
+        {
+          "name": "gt_success",
+          "source": "steps.post_action.info.success",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 15,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false,
+            true
+          ]
+        },
+        {
+          "name": "gt_target_init_x",
+          "source": "summary.reset_info",
+          "scope": "episode_initial_only",
+          "step_coverage": null,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": true,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            0.6889317631721497,
+            0.4761798679828644,
+            0.6642844676971436,
+            0.6637162566184998,
+            0.6754516363143921,
+            0.4896840453147888,
+            0.46509426832199097,
+            0.48956456780433655,
+            0.4642859101295471,
+            0.6754507422447205,
+            0.6887905597686768,
+            0.47629252076148987,
+            0.6615132093429565,
+            0.6888067722320557,
+            0.6754266023635864,
+            0.4897746443748474,
+            0.46232160925865173,
+            0.48977476358413696,
+            0.46232131123542786,
+            0.6754365563392639
+          ]
+        },
+        {
+          "name": "gt_target_init_y",
+          "source": "summary.reset_info",
+          "scope": "episode_initial_only",
+          "step_coverage": null,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": true,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            -0.0683555155992508,
+            0.0628645122051239,
+            0.22580188512802124,
+            0.22604063153266907,
+            0.08103621006011963,
+            -0.08646790683269501,
+            0.20780083537101746,
+            -0.0867408961057663,
+            0.20820187032222748,
+            0.0810377448797226,
+            -0.06927697360515594,
+            0.06303441524505615,
+            0.2305966317653656,
+            -0.069267138838768,
+            0.08007360994815826,
+            -0.08635775744915009,
+            0.21262162923812866,
+            -0.08635739982128143,
+            0.21262229979038239,
+            0.08007456362247467
+          ]
+        },
+        {
+          "name": "gt_target_init_z",
+          "source": "summary.reset_info",
+          "scope": "episode_initial_only",
+          "step_coverage": null,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": true,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            0.8727702498435974,
+            0.8443600535392761,
+            0.8956102132797241,
+            0.8957810997962952,
+            0.8443602919578552,
+            0.8956103324890137,
+            0.8443588018417358,
+            0.8954683542251587,
+            0.872770369052887,
+            0.8443574905395508,
+            0.8270313143730164,
+            0.8714383244514465,
+            0.8443573713302612,
+            0.844357430934906,
+            0.8270315527915955,
+            0.8714385032653809,
+            0.8270314335823059,
+            0.8714385628700256,
+            0.8443572521209717,
+            0.8740342259407043
+          ]
+        },
+        {
+          "name": "gt_terminated",
+          "source": "steps.post_action.terminated",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 15,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false,
+            true
+          ]
+        },
+        {
+          "name": "gt_truncated",
+          "source": "steps.post_action.truncated",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 20,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false,
+            true
+          ]
+        }
+      ],
+      "missing_candidate_fields": [
+        "per_step_source_object_position",
+        "per_step_target_object_position",
+        "per_step_object_target_distance",
+        "per_step_tcp_position",
+        "per_step_tcp_object_distance",
+        "per_step_gripper_state"
+      ],
+      "progress_definition": null,
+      "onset_definition": null,
+      "notes": [
+        "This first-pass extraction is raw task-state GT only.",
+        "No predictor features, progress transforms, onset labels, threshold selection, or model training are performed.",
+        "Episode-initial poses are explicitly marked episode_initial_only and are not per-step trajectories."
+      ]
+    },
+    "open_drawer": {
+      "task": "open_drawer",
+      "episodes": 20,
+      "steps": 1316,
+      "successful_episodes": 12,
+      "failed_or_truncated_episodes": 8,
+      "fields": [
+        {
+          "name": "gt_cabinet_init_x",
+          "source": "summary.reset_info",
+          "scope": "episode_initial_only",
+          "step_coverage": null,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": true,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            0.9449999332427979,
+            1.0449999570846558,
+            1.1449999809265137
+          ]
+        },
+        {
+          "name": "gt_cabinet_init_y",
+          "source": "summary.reset_info",
+          "scope": "episode_initial_only",
+          "step_coverage": null,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": true,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            -0.20000001788139343,
+            -1.280568540096283e-08,
+            0.19999998807907104
+          ]
+        },
+        {
+          "name": "gt_cabinet_init_z",
+          "source": "summary.reset_info",
+          "scope": "episode_initial_only",
+          "step_coverage": null,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": true,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            -0.06205032765865326
+          ]
+        },
+        {
+          "name": "gt_drawer_init_x",
+          "source": "summary.reset_info",
+          "scope": "episode_initial_only",
+          "step_coverage": null,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": true,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            0.9449999332427979,
+            1.0449999570846558,
+            1.1449999809265137
+          ]
+        },
+        {
+          "name": "gt_drawer_init_y",
+          "source": "summary.reset_info",
+          "scope": "episode_initial_only",
+          "step_coverage": null,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": true,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            -0.20000001788139343,
+            -1.280568540096283e-08,
+            0.19999998807907104
+          ]
+        },
+        {
+          "name": "gt_drawer_init_z",
+          "source": "summary.reset_info",
+          "scope": "episode_initial_only",
+          "step_coverage": null,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 0,
+          "recorded_as_repeated_column": true,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            0.605950117111206,
+            0.36094993352890015,
+            0.11594979465007782
+          ]
+        },
+        {
+          "name": "gt_drawer_qpos",
+          "source": "steps.post_action.info.qpos",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 20,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            4.3218208654568265e-15,
+            5.231676552343084e-15,
+            7.860148960197634e-15,
+            1.2181963472907356e-14,
+            1.6503777985617078e-14,
+            2.08255924983268e-14,
+            2.5147407011036522e-14,
+            2.9469292674513814e-14,
+            3.37913968724915e-14,
+            3.811350107046918e-14,
+            6.270952144404873e-05,
+            0.0016751091461628675,
+            0.017687631770968437,
+            0.06620343029499054,
+            0.09830284118652344,
+            0.11589579284191132,
+            0.11463204771280289,
+            0.1149086058139801,
+            0.11492475867271423,
+            0.11455553025007248
+          ]
+        },
+        {
+          "name": "gt_elapsed_steps",
+          "source": "steps.post_action.info.elapsed_steps",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 20,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "integer"
+          ],
+          "distinct_values_sample": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ]
+        },
+        {
+          "name": "gt_reward",
+          "source": "steps.post_action.reward",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 12,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "number"
+          ],
+          "distinct_values_sample": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "gt_success",
+          "source": "steps.post_action.info.success",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 12,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false,
+            true
+          ]
+        },
+        {
+          "name": "gt_terminated",
+          "source": "steps.post_action.terminated",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 12,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false,
+            true
+          ]
+        },
+        {
+          "name": "gt_truncated",
+          "source": "steps.post_action.truncated",
+          "scope": "per_step",
+          "step_coverage": 1.0,
+          "row_coverage": 1.0,
+          "episode_coverage": 1.0,
+          "episodes_with_temporal_variation": 8,
+          "recorded_as_repeated_column": false,
+          "types": [
+            "boolean"
+          ],
+          "distinct_values_sample": [
+            false,
+            true
+          ]
+        }
+      ],
+      "missing_candidate_fields": [
+        "per_step_tcp_position",
+        "per_step_handle_position"
+      ],
+      "progress_definition": null,
+      "onset_definition": null,
+      "notes": [
+        "This first-pass extraction is raw task-state GT only.",
+        "No predictor features, progress transforms, onset labels, threshold selection, or model training are performed.",
+        "Episode-initial poses are explicitly marked episode_initial_only and are not per-step trajectories."
+      ]
+    }
+  }
+}

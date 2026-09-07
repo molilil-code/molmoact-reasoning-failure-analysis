@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Editors
+.vscode/
+.idea/
+
+# Env
+.env/
+venv/
+env/
+
+# Heavy / generated run artifacts
+models/
+results/
+logs/
+outputs/
+rollouts/
+data/
+
+# Third-party vendored subset (installed via pip simpler_env)
+experiments/simpler_env/
+
+# Model weights
+*.safetensors
+*.ckpt
+*.pth
+*.pt
+
+# Claude / AI tooling residue (keep out of teacher-facing repo)
+.claude/
+
+# Junk / accidental local artifacts
+_probe_tmp.py
+tatus --short
+*.dupbackup
+
+# OS
+Thumbs.db
+.DS_Store

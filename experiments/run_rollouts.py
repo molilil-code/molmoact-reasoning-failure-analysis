@@ -52,7 +52,6 @@ from simpler_env.utils.env.env_builder import (
 from simpler_env.utils.env.observation_utils import (
     get_image_from_maniskill2_obs_dict,
 )
-from simpler_env.utils.visualization import write_video
 
 
 # ---------------------------------------------------------------------
@@ -65,6 +64,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from src.instrumented_molmoact import (  # noqa: E402
     InstrumentedMolmoAct,
+    RobustJSONEncoder,
     to_jsonable,
 )
 from src.task_configs import get_conditions  # noqa: E402
@@ -124,6 +124,18 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=None,
         help="Run at most N conditions after start-index. Omit to run all.",
+    )
+
+    parser.add_argument(
+        "--indices",
+        type=int,
+        nargs="+",
+        default=None,
+        help=(
+            "Run explicit condition indices, e.g. "
+            "--indices 25 29 37 45 49. "
+            "Useful for stratified pilot sampling."
+        ),
     )
 
     parser.add_argument(
@@ -188,6 +200,15 @@ def parse_args() -> argparse.Namespace:
     if args.limit is not None and args.limit <= 0:
         parser.error("--limit must be > 0")
 
+    if args.indices is not None:
+        if args.start_index != 0:
+            parser.error("--indices cannot be combined with non-zero --start-index")
+        if args.limit is not None:
+            parser.error("--indices cannot be combined with --limit")
+        for i in args.indices:
+            if i < 0:
+                parser.error(f"--indices contains negative value: {i}")
+
     if args.resume and args.overwrite:
         parser.error("--resume and --overwrite cannot be used together")
 
@@ -206,6 +227,7 @@ def json_dump(path: Path, obj: Any) -> None:
             f,
             ensure_ascii=False,
             indent=2,
+            cls=RobustJSONEncoder,
         )
 
 
@@ -214,6 +236,7 @@ def json_line(obj: Any) -> str:
         to_jsonable(obj),
         ensure_ascii=False,
         separators=(",", ":"),
+        cls=RobustJSONEncoder,
     )
 
 
@@ -236,7 +259,28 @@ def select_conditions(
     all_conditions: List[Dict[str, Any]],
     start_index: int,
     limit: Optional[int],
+    indices: Optional[List[int]] = None,
 ) -> List[Dict[str, Any]]:
+    if indices is not None:
+        selected = []
+
+        seen = set()
+
+        for idx in indices:
+            if idx < 0 or idx >= len(all_conditions):
+                raise ValueError(
+                    f"condition index {idx} out of range "
+                    f"[0, {len(all_conditions) - 1}]"
+                )
+
+            if idx in seen:
+                continue
+
+            seen.add(idx)
+            selected.append(all_conditions[idx])
+
+        return selected
+
     if start_index >= len(all_conditions):
         raise ValueError(
             f"start-index={start_index} is outside condition list "
@@ -631,6 +675,8 @@ def run_episode(
     )
 
     if save_video and annotated_frames:
+        from simpler_env.utils.visualization import write_video
+
         write_video(
             str(episode_dir / "rollout.mp4"),
             annotated_frames,
@@ -652,16 +698,30 @@ def rebuild_task_summary(task_dir: Path) -> Tuple[int, int, int]:
         summary_path = condition_dir / "summary.json"
         error_path = condition_dir / "error.json"
 
+        loaded = False
         if summary_path.exists():
-            with summary_path.open("r", encoding="utf-8") as f:
-                summaries.append(json.load(f))
+            try:
+                with summary_path.open("r", encoding="utf-8") as f:
+                    summaries.append(json.load(f))
+                loaded = True
+            except (json.JSONDecodeError, OSError) as exc:
+                print(
+                    f"    WARN: skipping corrupted {summary_path} "
+                    f"({type(exc).__name__}: {exc})"
+                )
 
-        elif error_path.exists():
-            with error_path.open("r", encoding="utf-8") as f:
-                errors.append(json.load(f))
+        if not loaded and error_path.exists():
+            try:
+                with error_path.open("r", encoding="utf-8") as f:
+                    errors.append(json.load(f))
+            except (json.JSONDecodeError, OSError) as exc:
+                print(
+                    f"    WARN: skipping corrupted {error_path} "
+                    f"({type(exc).__name__}: {exc})"
+                )
 
-    summaries.sort(key=lambda x: int(x["condition_id"]))
-    errors.sort(key=lambda x: int(x["condition_id"]))
+    summaries.sort(key=lambda x: int(x.get("condition_id", -1)))
+    errors.sort(key=lambda x: int(x.get("condition_id", -1)))
 
     with (task_dir / "summary.jsonl").open("w", encoding="utf-8") as f:
         for item in summaries:
@@ -671,7 +731,7 @@ def rebuild_task_summary(task_dir: Path) -> Tuple[int, int, int]:
         for item in errors:
             f.write(json_line(item) + "\n")
 
-    num_success = sum(bool(x["success"]) for x in summaries)
+    num_success = sum(bool(x.get("success", False)) for x in summaries)
     num_failure = len(summaries) - num_success
     num_error = len(errors)
 
@@ -746,15 +806,19 @@ def main() -> None:
         all_conditions=all_conditions,
         start_index=args.start_index,
         limit=args.limit,
+        indices=args.indices,
     )
+
+    selected_ids = [
+        int(c["condition_id"])
+        for c in selected_conditions
+    ]
 
     print(
         f"Task: {args.task}\n"
         f"Total available conditions: {len(all_conditions)}\n"
         f"Selected conditions: {len(selected_conditions)}\n"
-        f"Selected index range: "
-        f"{args.start_index} .. "
-        f"{args.start_index + len(selected_conditions) - 1}"
+        f"Selected condition ids: {selected_ids}"
     )
 
     if args.dry_run:
@@ -790,6 +854,7 @@ def main() -> None:
             "backend": args.backend,
             "start_index": args.start_index,
             "limit": args.limit,
+            "indices": args.indices,
             "save_images": args.save_images,
             "save_video": args.save_video,
             "resume": args.resume,
@@ -809,6 +874,59 @@ def main() -> None:
     simpler_env_cwd = ensure_simpler_env_working_directory()
     print(f"Using SimplerEnv working directory: {simpler_env_cwd}")
 
+    pending: List[Tuple[int, Dict[str, Any], Path]] = []
+    for _idx, condition in enumerate(selected_conditions, start=1):
+        _cid = int(condition["condition_id"])
+        _episode_dir = task_dir / condition_dir_name(condition)
+        _summary_path = _episode_dir / "summary.json"
+
+        if _summary_path.exists() and args.resume and not args.overwrite:
+            print(
+                f"[pre-check] condition={_cid}: already complete, "
+                f"will skip (--resume)"
+            )
+            continue
+
+        if _summary_path.exists() and not args.overwrite and not args.resume:
+            raise FileExistsError(
+                f"{_summary_path} already exists. "
+                "Use --resume to skip it or --overwrite to rerun it."
+            )
+
+        if _episode_dir.exists() and not _summary_path.exists():
+            if not (args.resume or args.overwrite):
+                raise FileExistsError(
+                    f"Incomplete directory exists: {_episode_dir}. "
+                    "Use --resume or --overwrite."
+                )
+
+        pending.append((_idx, condition, _episode_dir))
+
+    if not pending:
+        print(
+            "\nAll conditions are already complete under --resume. "
+            "Skipping model load and environment build."
+        )
+        success_n, failure_n, error_n = rebuild_task_summary(task_dir)
+        completed_n = success_n + failure_n
+        success_rate = (
+            success_n / completed_n if completed_n > 0 else float("nan")
+        )
+        print("\n===== RUN SUMMARY =====")
+        print(f"completed: {completed_n}")
+        print(f"success:   {success_n}")
+        print(f"failure:   {failure_n}")
+        print(f"errors:    {error_n}")
+        if completed_n > 0:
+            print(f"success rate: {success_rate:.3f}")
+        print(f"results: {task_dir}")
+        return
+
+    print(
+        f"\n{len(pending)} condition(s) pending out of "
+        f"{len(selected_conditions)}; loading model..."
+    )
+
     print("\nLoading MolmoAct once...")
     model = InstrumentedMolmoAct(
         saved_model_path=checkpoint_for_model,
@@ -821,9 +939,8 @@ def main() -> None:
     current_env_key: Optional[str] = None
 
     try:
-        for local_idx, condition in enumerate(selected_conditions, start=1):
+        for local_idx, condition, episode_dir in pending:
             cid = int(condition["condition_id"])
-            episode_dir = task_dir / condition_dir_name(condition)
             summary_path = episode_dir / "summary.json"
 
             if summary_path.exists():
@@ -842,8 +959,6 @@ def main() -> None:
                         "Use --resume to skip it or --overwrite to rerun it."
                     )
 
-            # In resume mode, an existing directory without summary.json is
-            # considered incomplete and is safely restarted.
             elif episode_dir.exists():
                 if args.resume or args.overwrite:
                     shutil.rmtree(episode_dir)

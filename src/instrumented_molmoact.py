@@ -1,6 +1,7 @@
 # src/instrumented_molmoact.py
 
 import io
+import json
 import time
 from contextlib import redirect_stdout
 
@@ -10,20 +11,100 @@ from simpler_env.policies.molmoact.molmoact_model import MolmoActInference
 from simpler_env.policies.molmoact.molmoact_model_vllm import MolmoActInferenceVLLM
 
 
+try:
+    from sapien.core import Pose as _SapienPose
+
+    _HAS_SAPIEN_POSE = True
+except ImportError:
+    _HAS_SAPIEN_POSE = False
+    _SapienPose = None
+
+
+_PRIMITIVE_TYPES = (type(None), bool, int, float, str, bytes, bytearray)
+
+
+def _is_pose(x) -> bool:
+    if _HAS_SAPIEN_POSE and isinstance(x, _SapienPose):
+        return True
+    if type(x).__name__ == "Pose" and hasattr(x, "p") and hasattr(x, "q"):
+        return True
+    return False
+
+
 def to_jsonable(x):
+    if isinstance(x, _PRIMITIVE_TYPES):
+        if isinstance(x, (bytes, bytearray)):
+            try:
+                return x.decode("utf-8", errors="replace")
+            except Exception:
+                return repr(x)
+        return x
+
     if isinstance(x, np.ndarray):
-        return x.tolist()
+        if x.dtype == object:
+            return [to_jsonable(v) for v in x.tolist()]
+        try:
+            return x.tolist()
+        except Exception:
+            return [to_jsonable(v) for v in x.tolist()]
 
     if isinstance(x, np.generic):
-        return x.item()
+        try:
+            return x.item()
+        except Exception:
+            return to_jsonable(np.asarray(x).tolist())
 
     if isinstance(x, dict):
-        return {k: to_jsonable(v) for k, v in x.items()}
+        return {str(k) if not isinstance(k, str) else k: to_jsonable(v) for k, v in x.items()}
 
-    if isinstance(x, (list, tuple)):
+    if isinstance(x, (list, tuple, set, frozenset)):
         return [to_jsonable(v) for v in x]
 
-    return x
+    if _is_pose(x):
+        return {
+            "__type__": "sapien.core.Pose",
+            "p": np.asarray(x.p).tolist(),
+            "q": np.asarray(x.q).tolist(),
+        }
+
+    try:
+        json.dumps(x, ensure_ascii=False)
+        return x
+    except (TypeError, ValueError, OverflowError):
+        pass
+
+    if hasattr(x, "tolist") and callable(getattr(x, "tolist", None)):
+        try:
+            return to_jsonable(x.tolist())
+        except Exception:
+            pass
+
+    if hasattr(x, "__dict__") and vars(x):
+        return {"__type__": type(x).__name__, "attrs": to_jsonable(vars(x))}
+
+    try:
+        return str(x)
+    except Exception:
+        return {"__unserializable__": type(x).__name__}
+
+
+class RobustJSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        try:
+            return to_jsonable(o)
+        except Exception:
+            try:
+                return {"__type__": type(o).__name__, "__repr__": repr(o)}
+            except Exception:
+                return {"__unserializable__": True}
+        return super().default(o)
+
+
+__all__ = [
+    "InstrumentedMolmoAct",
+    "to_jsonable",
+    "RobustJSONEncoder",
+]
 
 
 class InstrumentedMolmoAct:

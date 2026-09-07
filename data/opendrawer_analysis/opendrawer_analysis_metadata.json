@@ -1,0 +1,184 @@
+{
+  "label_horizons": [
+    5,
+    10,
+    20
+  ],
+  "grouping": "episode_key",
+  "cv": "5-fold outer GroupKFold; threshold from inner OOF predictions inside each outer train fold",
+  "bootstrap": {
+    "unit": "episode_key",
+    "n": 1000,
+    "ci": "percentile 95%"
+  },
+  "episode_score_note": "max_valid is retrospective any-alert aggregation; H-window detection and lead time only count alerts in [t_onset-H, t_onset-1].",
+  "a0_note": "No action_logprob column exists in formal step_features.csv; A0 is a translation-magnitude proxy.",
+  "feature_groups": {
+    "action_proxy": [
+      "feat_model_translation_norm"
+    ],
+    "action_structured": [
+      "feat_model_translation_norm",
+      "feat_model_rotation_norm",
+      "feat_model_gripper",
+      "feat_model_action_jump_prev_l2",
+      "feat_model_translation_jump_prev_l2",
+      "feat_model_rotation_jump_prev_l2",
+      "feat_model_translation_cosine_prev",
+      "feat_model_translation_direction_flip",
+      "feat_model_gripper_change_prev",
+      "feat_model_action_jump_rollmean"
+    ],
+    "trace": [
+      "feat_trace_num_points",
+      "feat_trace_polyline_length",
+      "feat_trace_straightness",
+      "feat_trace_mean_turn_angle_rad",
+      "feat_trace_spread",
+      "feat_trace_curvature",
+      "feat_trace_endpoint_drift_prev",
+      "feat_trace_shape_drift_prev",
+      "feat_trace_direction_change_prev_rad",
+      "feat_trace_shape_drift_rollmean"
+    ],
+    "depth": [
+      "feat_depth_token_count",
+      "feat_depth_unique_count",
+      "feat_depth_token_entropy",
+      "feat_depth_spatial_boundary_ratio",
+      "feat_depth_hamming_prev",
+      "feat_depth_change_ratio_prev",
+      "feat_depth_change_ratio_rollmean"
+    ]
+  },
+  "ablations": {
+    "A0_action_magnitude_proxy": [
+      "action_proxy"
+    ],
+    "A1_action_structured": [
+      "action_structured"
+    ],
+    "A2_trace_only": [
+      "trace"
+    ],
+    "A3_depth_trace": [
+      "depth",
+      "trace"
+    ],
+    "A4_depth_trace_action": [
+      "depth",
+      "trace",
+      "action_structured"
+    ]
+  },
+  "step_features": "data\\formal_features\\step_features.csv",
+  "parameters": {
+    "W": 10,
+    "eps": 0.02,
+    "min_start": 20,
+    "horizons": [
+      5,
+      10,
+      20
+    ],
+    "n_bootstrap": 1000
+  },
+  "n_open_drawer_steps": 1316,
+  "n_open_drawer_episodes": 20,
+  "validation_episodes": [
+    "open_drawer/condition_0000",
+    "open_drawer/condition_0001",
+    "open_drawer/condition_0004",
+    "open_drawer/condition_0007",
+    "open_drawer/condition_0008",
+    "open_drawer/condition_0009",
+    "open_drawer/condition_0010",
+    "open_drawer/condition_0014",
+    "open_drawer/condition_0017",
+    "open_drawer/condition_0019"
+  ],
+  "manual_annotation_note": "Initial curve review; values are frozen and never tuned on AUROC.",
+  "formal_modality_ablations": {
+    "label_horizons": [
+      5,
+      10,
+      20
+    ],
+    "grouping": "episode_key",
+    "cv": "5-fold outer GroupKFold; threshold from inner OOF predictions inside each outer train fold",
+    "bootstrap": {
+      "unit": "episode_key",
+      "n": 1000,
+      "ci": "percentile 95%"
+    },
+    "episode_score_note": "max_valid is retrospective any-alert aggregation; H-window detection and lead time only count alerts in [t_onset-H, t_onset-1].",
+    "a0_note": "No action_logprob column exists in formal step_features.csv; A0 is a translation-magnitude proxy.",
+    "feature_groups": {
+      "action_proxy": [
+        "feat_model_translation_norm"
+      ],
+      "action_structured": [
+        "feat_model_translation_norm",
+        "feat_model_rotation_norm",
+        "feat_model_gripper",
+        "feat_model_action_jump_prev_l2",
+        "feat_model_translation_jump_prev_l2",
+        "feat_model_rotation_jump_prev_l2",
+        "feat_model_translation_cosine_prev",
+        "feat_model_translation_direction_flip",
+        "feat_model_gripper_change_prev",
+        "feat_model_action_jump_rollmean"
+      ],
+      "trace": [
+        "feat_trace_num_points",
+        "feat_trace_polyline_length",
+        "feat_trace_straightness",
+        "feat_trace_mean_turn_angle_rad",
+        "feat_trace_spread",
+        "feat_trace_curvature",
+        "feat_trace_endpoint_drift_prev",
+        "feat_trace_shape_drift_prev",
+        "feat_trace_direction_change_prev_rad",
+        "feat_trace_shape_drift_rollmean"
+      ],
+      "depth": [
+        "feat_depth_token_count",
+        "feat_depth_unique_count",
+        "feat_depth_token_entropy",
+        "feat_depth_spatial_boundary_ratio",
+        "feat_depth_hamming_prev",
+        "feat_depth_change_ratio_prev",
+        "feat_depth_change_ratio_rollmean"
+      ]
+    },
+    "ablations": {
+      "Action": [
+        "action_structured"
+      ],
+      "Action+Depth": [
+        "action_structured",
+        "depth"
+      ],
+      "Action+Trace": [
+        "action_structured",
+        "trace"
+      ],
+      "Action+Depth+Trace": [
+        "action_structured",
+        "depth",
+        "trace"
+      ],
+      "Depth+Trace": [
+        "depth",
+        "trace"
+      ]
+    }
+  },
+  "premature_alert_definition": "score >= outer-fold threshold at t < t_onset-H; distance_to_onset=t_onset-t",
+  "detectors": {
+    "T0_raw": "raw risk threshold crossing",
+    "T1_rollmean3": "causal 3-step rolling mean threshold crossing",
+    "T2_consecutive2": "two consecutive raw steps over threshold"
+  },
+  "detector_note": "T0/T1/T2 apply fixed raw-score thresholds selected in the training fold; no smoothing or persistence parameter is tuned on held-out episodes."
+}

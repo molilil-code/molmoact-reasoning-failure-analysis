@@ -1,0 +1,3 @@
+rule,n_episodes,failure_n,success_n,tp,tn,fp,fn,accuracy,sensitivity_failure_recall,specificity_success_recall,failure_precision
+median_rule_failure,20,8,12,8,12,0,0,1.0,1.0,1.0,1.0
+low_fraction_rule_failure,20,8,12,8,12,0,0,1.0,1.0,1.0,1.0

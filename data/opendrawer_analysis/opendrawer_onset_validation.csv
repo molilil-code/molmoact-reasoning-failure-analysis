@@ -1,0 +1,11 @@
+task,episode_key,condition_id,success,failure,num_steps,max_progress,automatic_t_onset,automatic_onset_frac,rule_W,rule_eps,rule_min_start,manual_t_onset,onset_match,annotation_note
+open_drawer,open_drawer/condition_0000,0,0,1,113,0.8046652376651764,22,0.19469026548672566,10,0.02,20,22.0,True,first visually sustained irreversible plateau
+open_drawer,open_drawer/condition_0001,1,1,0,23,1.0,,,10,0.02,20,,True,success trajectory reaches completion; no failure onset
+open_drawer,open_drawer/condition_0004,4,1,0,21,1.0,,,10,0.02,20,,True,success trajectory reaches completion; no failure onset
+open_drawer,open_drawer/condition_0007,7,0,1,113,2.1971537725780834e-13,20,0.17699115044247787,10,0.02,20,20.0,True,first visually sustained irreversible plateau
+open_drawer,open_drawer/condition_0008,8,0,1,113,8.339695600767525e-10,20,0.17699115044247787,10,0.02,20,20.0,True,first visually sustained irreversible plateau
+open_drawer,open_drawer/condition_0009,9,0,1,113,0.165321317811807,46,0.40707964601769914,10,0.02,20,46.0,True,first visually sustained irreversible plateau
+open_drawer,open_drawer/condition_0010,10,0,1,113,0.4154618581136068,48,0.4247787610619469,10,0.02,20,48.0,True,first visually sustained irreversible plateau
+open_drawer,open_drawer/condition_0014,14,1,0,76,1.0,,,10,0.02,20,,True,success trajectory reaches completion; no failure onset
+open_drawer,open_drawer/condition_0017,17,1,0,40,1.0,,,10,0.02,20,,True,success trajectory reaches completion; no failure onset
+open_drawer,open_drawer/condition_0019,19,1,0,38,1.0,,,10,0.02,20,,True,success trajectory reaches completion; no failure onset
